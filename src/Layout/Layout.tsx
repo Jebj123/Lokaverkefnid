@@ -6,6 +6,41 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useAuth } 
 import { useCart } from '../features/cart/CartContext';
 import { useEffect, useRef } from 'react';
 
+function MiniCart() {
+  const { items, totalItems } = useCart()
+  const total = items.reduce((sum, i) => sum + i.product.price_cents * i.quantity, 0)
+  const currency = items[0]?.product.currency ?? ''
+
+  return (
+    <div className="absolute right-0 top-full mt-1 w-72 bg-white border rounded-xl shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+      {totalItems === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-6">Your cart is empty.</p>
+      ) : (
+        <>
+          <div className="flex flex-col gap-2 p-3 max-h-64 overflow-y-auto">
+            {items.map(({ product, quantity }) => (
+              <div key={product.id} className="flex items-center gap-3">
+                {product.image_url && (
+                  <img src={product.image_url} alt={product.name} className="h-10 w-10 object-contain rounded" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{product.name}</p>
+                  <p className="text-xs text-gray-500">Qty: {quantity}</p>
+                </div>
+                <p className="text-sm font-bold whitespace-nowrap">{product.price_cents * quantity} {product.currency}</p>
+              </div>
+            ))}
+          </div>
+          <div className="border-t px-3 py-2 flex justify-between items-center">
+            <span className="text-sm font-bold">Total: {total} {currency}</span>
+            <Link to="/cart" className="text-xs bg-[#6c47ff] text-white rounded-full px-3 py-1 hover:opacity-90">View Cart</Link>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 function navButtonClassName(isActive: boolean) {
   return [
     'rounded-md px-3 py-2 text-sm font-medium transition-colors',
@@ -48,14 +83,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <img src={joystick} className="h-15"/>
             </Link>
             <div className="flex-1 flex items-center justify-end gap-3">
-              <Link to="/cart" className="relative p-2">
-                <img src={cartIcon} className="h-8 border rounded-sm" alt="Cart" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#6c47ff] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {totalItems}
-                  </span>
-                )}
-              </Link>
+              <div className="relative group p-2">
+                <Link to="/cart" className="relative block">
+                  <img src={cartIcon} className="h-8 border rounded-sm" alt="Cart" />
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-[#6c47ff] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {totalItems}
+                    </span>
+                  )}
+                </Link>
+                <MiniCart />
+              </div>
               <SignedOut>
                 <SignInButton>
                   <button className="bg-gray-100 text-black rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">Sign In</button>

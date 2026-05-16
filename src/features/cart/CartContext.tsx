@@ -12,6 +12,7 @@ type CartContextType = {
   addToCart: (product: Product) => void
   removeFromCart: (productId: number) => void
   updateQuantity: (productId: number, quantity: number) => void
+  clearCart: () => void
   totalItems: number
 }
 
@@ -48,10 +49,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems(prev => prev.map(i => i.product.id === productId ? { ...i, quantity } : i))
   }
 
+  const clearCart = () => setItems([])
+
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, totalItems }}>
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems }}>
       {children}
     </CartContext.Provider>
   )

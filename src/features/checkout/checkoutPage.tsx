@@ -6,8 +6,9 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/Components/ui/input'
 import { checkoutSchema, type CheckoutForm } from './checkoutSchema'
 
+
 const CheckoutPage = () => {
-  const { items, totalItems } = useCart()
+  const { items, totalItems, clearCart } = useCart()
   const navigate = useNavigate()
 
   const form = useForm<CheckoutForm>({
@@ -32,9 +33,10 @@ const CheckoutPage = () => {
   const total = items.reduce((sum, i) => sum + i.product.price_cents * i.quantity, 0)
   const currency = items[0]?.product.currency ?? ''
 
-  const onSubmit = (data: CheckoutForm) => {
-    console.log('Order submitted:', data)
-    // TODO: send order to Supabase
+  const onSubmit = (_data: CheckoutForm) => {
+    sessionStorage.setItem('orderSnapshot', JSON.stringify(items))
+    clearCart()
+    navigate('/order-complete')
   }
 
   return (
@@ -176,7 +178,7 @@ const CheckoutPage = () => {
           <button
             type="submit"
             className="mt-2 bg-[#6c47ff] text-white rounded-full py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
-          >
+>
             Place Order
           </button>
         </form>

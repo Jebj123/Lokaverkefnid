@@ -50,7 +50,7 @@ const Home = () => {
         onClick={() => setSidebarOpen(true)}
         className="mb-6 ml-77 border px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors cursor-pointer"
       >
-        Filter by Genre
+        Filter
       </button>
 
       {sidebarOpen && (
