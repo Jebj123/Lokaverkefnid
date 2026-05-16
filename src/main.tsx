@@ -20,7 +20,6 @@ function ClerkWithRouter() {
   return (
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
-      signInForceRedirectUrl="/members"
       routerPush={(to) => navigate(toPath(to))}
       routerReplace={(to) => navigate(toPath(to), { replace: true })}
     >

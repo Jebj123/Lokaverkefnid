@@ -6,6 +6,8 @@ import ProductPage from "./features/products/ProductPage"
 import CartPage from "./features/cart/CartPage"
 import Layout from "./Layout/Layout"
 import { CartProvider } from './features/cart/CartContext'
+import CheckoutPage from './features/checkout/checkoutPage'
+import { ProtectedRoute } from './features/auth/protectedRoute'
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
           <Route path="/shop/:shopId" element={<ShopPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         </Routes>
       </Layout>
     </CartProvider>

@@ -1,8 +1,9 @@
 import { useCart } from './CartContext'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const CartPage = () => {
-  const { items, removeFromCart, totalItems } = useCart()
+  const { items, removeFromCart, updateQuantity, totalItems } = useCart()
+  const navigate = useNavigate()
 
   if (totalItems === 0) {
     return (
@@ -29,12 +30,22 @@ const CartPage = () => {
             )}
             <div className="flex-1">
               <h2 className="font-semibold">{product.name}</h2>
-              <p className="text-sm text-gray-500">Qty: {quantity}</p>
               <p className="font-bold">{product.price_cents * quantity} {product.currency}</p>
+            </div>
+            <div className="flex flex-col items-center border rounded overflow-hidden w-6">
+              <button
+                onClick={() => updateQuantity(product.id, quantity + 1)}
+                className="w-full hover:bg-gray-100 cursor-pointer text-[9px] leading-none py-0.5"
+              >▲</button>
+              <span className="text-xs font-medium border-y w-full text-center py-0.5">{quantity}</span>
+              <button
+                onClick={() => updateQuantity(product.id, quantity - 1)}
+                className="w-full hover:bg-gray-100 cursor-pointer text-[9px] leading-none py-0.5"
+              >▼</button>
             </div>
             <button
               onClick={() => removeFromCart(product.id)}
-              className="text-sm text-red-500 hover:text-red-700 cursor-pointer"
+              className="text-sm text-red-500 hover:text-red-700 cursor-pointer ml-2"
             >
               Remove
             </button>
@@ -42,8 +53,8 @@ const CartPage = () => {
         ))}
       </div>
       <div className="mt-6 flex justify-between items-center border-t pt-4">
-        <p className="text-lg font-bold">Total: {total} {currency}</p>
-        <button className="bg-[#6c47ff] text-white rounded-full px-6 py-2 font-medium hover:opacity-90 cursor-pointer">
+        <p className="text-lg font-bold text-red-500 underline">Total: {total} {currency}</p>
+        <button className="bg-[#6c47ff] text-white rounded-full px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
           Checkout
         </button>
       </div>
