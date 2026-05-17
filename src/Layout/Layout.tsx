@@ -6,8 +6,9 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useAuth } 
 import { useCart } from '../features/cart/CartContext';
 import { useEffect, useRef } from 'react';
 
+
 function MiniCart() {
-  const { items, totalItems } = useCart()
+  const { items, totalItems, removeFromCart} = useCart()
   const total = items.reduce((sum, i) => sum + i.product.price_cents * i.quantity, 0)
   const currency = items[0]?.product.currency ?? ''
 
@@ -25,14 +26,19 @@ function MiniCart() {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{product.name}</p>
-                  <p className="text-xs text-gray-500">Qty: {quantity}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-gray-500">Qty: {quantity}</p>
+                    <button className="text-xs text-red-400 border rounded-sm px-1 hover:bg-red-100" onClick={() => removeFromCart(product.id)}>
+                      Remove
+                    </button>
+                  </div>
                 </div>
-                <p className="text-sm font-bold whitespace-nowrap">{product.price_cents * quantity} {product.currency}</p>
+                <p className="text-sm font-bold whitespace-nowrap text-black">{product.price_cents * quantity} {product.currency}</p>
               </div>
             ))}
           </div>
           <div className="border-t px-3 py-2 flex justify-between items-center">
-            <span className="text-sm font-bold">Total: {total} {currency}</span>
+            <span className="text-sm font-bold underline text-red-500">Total: {total} {currency}</span>
             <Link to="/cart" className="text-xs bg-[#6c47ff] text-white rounded-full px-3 py-1 hover:opacity-90">View Cart</Link>
           </div>
         </>
@@ -75,13 +81,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen w-full">
       <header>
-        <div className="flex mb-6  border-white border-b-4 pb-4pt-5 rounded-lg">
-          <div className="flex items-center p-5 border w-full">
+        <div className="flex mb-6  border-white border-b-4 pb-4pt-5 rounded-sm">
+          <div className="flex items-center p-2 border w-full">
             <div className="flex-1" />
+            <div className="border-4 pl-10 pr-10 rounded-md pt-3 pb-3 border-black bg-white">
             <Link to="/" className="flex items-center gap-2">
               <span className="text-xl font-bold text-black underline">Gamehub</span>
               <img src={joystick} className="h-15"/>
             </Link>
+            </div>
             <div className="flex-1 flex items-center justify-end gap-3">
               <div className="relative group p-2">
                 <Link to="/cart" className="relative block">

@@ -24,7 +24,7 @@ const CartPage = () => {
       <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
       <div className="flex flex-col gap-4">
         {items.map(({ product, quantity }) => (
-          <div key={product.id} className="flex items-center gap-4 border rounded-xl p-4 shadow-sm">
+          <div key={product.id} className="flex items-center gap-2 border rounded-sm p-2 shadow-sm">
             {product.image_url && (
               <img src={product.image_url} alt={product.name} className="h-16 w-16 object-contain" />
             )}
@@ -45,7 +45,7 @@ const CartPage = () => {
             </div>
             <button
               onClick={() => removeFromCart(product.id)}
-              className="text-sm text-red-500 hover:text-red-700 cursor-pointer ml-2"
+              className="text-sm text-red-500 hover:text-red-700 cursor-pointer ml-2 border pl-1 pr-1 rounded-sm hover:bg-red-100"
             >
               Remove
             </button>
