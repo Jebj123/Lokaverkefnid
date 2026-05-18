@@ -13,4 +13,5 @@ export type Product = {
   image_url_2: string | null
   image_url_3: string | null
   youtube_url: string | null
+  platforms: string[] | null
 }

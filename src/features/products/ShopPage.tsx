@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
-import { useCart } from '../cart/CartContext'
-
 const ShopPage = () => {
   const { shopId } = useParams<{ shopId: string }>()
-  const { addToCart } = useCart()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,10 +30,10 @@ const ShopPage = () => {
   if (error) return <div className="flex justify-center p-10 text-red-500">Error: {error}</div>
 
   return (
-    <div className="px-6 py-8">
+    <div className="px-6 py-8 border-x border-gray-500 min-h-full">
       <div className="flex flex-wrap gap-6">
         {products.map((product) => (
-          <div key={product.id} className="relative group border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col w-44 h-64">
+          <div key={product.id} className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col w-44 h-64">
             <Link to={`/product/${product.id}`} className="flex flex-col flex-1">
               {product.image_url && (
                 <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />
@@ -48,12 +45,6 @@ const ShopPage = () => {
                 </p>
               </div>
             </Link>
-            <button
-              onClick={() => addToCart(product)}
-              className="absolute bottom-0 left-0 right-0 bg-[#6c47ff] text-white text-sm font-medium py-2 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-            >
-              Add to Cart
-            </button>
           </div>
         ))}
       </div>

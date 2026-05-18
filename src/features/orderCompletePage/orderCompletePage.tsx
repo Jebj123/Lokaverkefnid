@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Product } from '../../types'
 
-type OrderItem = { product: Product; quantity: number }
+type OrderItem = { product: Product; quantity: number; platform?: string }
 
 const OrderCompletePage = () => {
   const navigate = useNavigate()
@@ -22,13 +22,14 @@ const OrderCompletePage = () => {
   return (
     <div className="max-w-xl mx-auto px-6 py-10 flex flex-col items-center gap-6">
       <div className="flex flex-col gap-3 w-full">
-        {items.map(({ product, quantity }) => (
-          <div key={product.id} className="flex items-center gap-4 border rounded-xl p-4 shadow-sm">
+        {items.map(({ product, quantity, platform }) => (
+          <div key={`${product.id}-${platform}`} className="flex items-center gap-4 border rounded-xl p-4 shadow-sm">
             {product.image_url && (
               <img src={product.image_url} alt={product.name} className="h-14 w-14 object-contain" />
             )}
             <div className="flex-1">
               <p className="font-semibold">{product.name}</p>
+              {platform && <p className="text-xs text-gray-500">{platform}</p>}
               <p className="text-sm text-gray-500">Qty: {quantity}</p>
             </div>
             <p className="font-bold text-black">{product.price_cents * quantity} {product.currency}</p>

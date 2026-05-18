@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { SelectField } from '@/Components/ui/select'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
 import { useCart } from '../cart/CartContext'
@@ -19,6 +20,8 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedMedia, setSelectedMedia] = useState<MediaOption | null>(null)
+  const [selectedPlatform, setSelectedPlatform] = useState('')
+  const [platformError, setPlatformError] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,6 +45,7 @@ const ProductPage = () => {
     if (!product) return
     const options = buildMediaOptions(product)
     if (options.length > 0) setSelectedMedia(options[0])
+    if (product.platforms?.length === 1) setSelectedPlatform(product.platforms[0])
   }, [product])
 
   if (loading) return <div className="flex justify-center p-10">Loading...</div>
@@ -58,10 +62,9 @@ const ProductPage = () => {
       >
         ← Back
       </button>
-      <h1 className="text-3xl font-bold mb-4 underline">{product.name}</h1>
       <div className="flex gap-6">
         <div className="w-1/2 flex flex-col">
-          <div className="h-130 flex items-center justify-center p-8 bg-gray-100 rounded-sm">
+          <div className="h-130 flex items-center justify-center p-8 bg-gray-100 rounded-t-sm">
             {selectedMedia?.type === 'youtube' ? (
               <iframe
                 src={getYouTubeEmbedUrl(selectedMedia.value) ?? ''}
@@ -73,7 +76,7 @@ const ProductPage = () => {
             ) : null}
           </div>
           {mediaOptions.length > 1 && (
-            <div className="flex gap-2 flex-wrap px-6 py-4 justify-center bg-white border rounded-sm">
+            <div className="flex gap-2 flex-wrap px-6 py-4 justify-center bg-white border rounded-b-sm">
               {mediaOptions.map(opt => {
                 const isSelected = selectedMedia?.value === opt.value
                 const thumb = opt.type === 'youtube'
@@ -93,20 +96,45 @@ const ProductPage = () => {
           )}
         </div>
 
-        <div className="flex flex-col justify-between p-8 flex-1">
+        <div className="flex flex-col justify-between px-8 pb-8 flex-1">
           <div>
-            <p className="text-lg text-black uppercase tracking-wide pt-15">{product.slug}</p>
-            <p className="text-gray-600 mt-2">{product.description}</p>
+            <div className="text-center mb-4">
+              <h1 className="text-3xl font-bold underline pb-10">{product.name}</h1>
+              <p className="text-lg text-black uppercase tracking-wide">{product.slug}</p>
+            </div>
+            <p className="text-gray-600 mt-2 border-b pb-3">{product.description}</p>
+            {product.platforms && product.platforms.length > 0 && (
+              <div className="mt-4 w-50">
+                <p className="text-sm text-black mb-1 underline pb-2 pl-1">Select Platform:</p>
+                <SelectField
+                  options={product.platforms.map(p => ({ label: p, value: p }))}
+                  value={selectedPlatform}
+                  onChange={v => { setSelectedPlatform(v); setPlatformError(false) }}
+                  placeholder='Select platform'
+                  className='text-black'
+                />
+              </div>
+            )}
+            {platformError && (
+              <p className="text-red-500 text-sm mt-2">Please select a platform.</p>
+            )}
           </div>
           <div>
             <div className="flex items-center justify-between mt-6">
-              <p className="text-2xl font-bold text-black underline">
+              <p className="text-2xl font-bold text-black underline pl-3">
                 {product.price_cents != null ? `${product.price_cents} ${product.currency}` : 'N/A'}
               </p>
               <p className="text-sm text-gray-500">{product.stock_quantity} in stock</p>
             </div>
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => {
+                if (product.platforms && product.platforms.length > 0 && !selectedPlatform) {
+                  setPlatformError(true)
+                  return
+                }
+                setPlatformError(false)
+                addToCart(product, selectedPlatform || undefined)
+              }}
               className="mt-4 w-full bg-[#6c47ff] text-white rounded-full py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
             >
               Add to Cart

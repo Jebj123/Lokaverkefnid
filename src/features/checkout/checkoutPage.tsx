@@ -41,31 +41,32 @@ const CheckoutPage = () => {
 
   return (
     <div className="px-6 py-10">
-      <h1 className="text-2xl font-bold mb-6 underline">Checkout</h1>
+      <h1 className="text-2xl font-bold mb-6 underline">Summary:</h1>
 
       <div className="flex gap-8 items-start">
-        <div className="flex flex-col gap-1 flex-1 border rounded-sm p-6 shadow-sm">
-          {items.map(({ product, quantity }) => (
-            <div key={product.id} className="flex items-center shadow-sm">
+        <div className="flex flex-col gap-1 flex-1 border rounded-sm p-6 shadow-sm bg-white">
+          {items.map(({ product, quantity, platform }) => (
+            <div key={`${product.id}-${platform}`} className="flex items-center shadow-sm">
               {product.image_url && (
                 <img src={product.image_url} alt={product.name} className="h-14 w-14 object-contain" />
               )}
               <div className="flex-1">
-                <p className="font-semibold">{product.name}</p>
+                <p className="font-semibold text-black">{product.name}</p>
+                {platform && <p className="text-xs text-gray-500 underline">{platform}</p>}
                 <p className="text-sm text-gray-500">Qty: {quantity}</p>
               </div>
-              <p className="font-bold">{product.price_cents * quantity} {product.currency}</p>
+              <p className="font-bold text-black">{product.price_cents * quantity} {product.currency}</p>
             </div>
           ))}
           <div className="flex justify-between items-center border-t pt-4 mt-2">
-            <p className="text-lg font-bold underline text-black">Total:</p>
+            <p className="text-lg font-bold underline text-black ">Total:</p>
             <p className="text-lg font-bold text-red-500 underline">{total} {currency}</p>
           </div>
         </div>
 
         <div className="flex-1">
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 border rounded-xl p-6 shadow-sm bg-gray-50">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 border rounded-xl p-6 shadow-sm bg-gray-100">
           <FormField
             control={form.control}
             name="name"

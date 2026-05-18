@@ -20,17 +20,18 @@ const CartPage = () => {
   const currency = items[0]?.product.currency ?? ''
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
-      <div className="flex flex-col gap-4">
-        {items.map(({ product, quantity }) => (
-          <div key={product.id} className="flex items-center gap-2 border rounded-sm p-2 shadow-sm">
+    <div className="w-189 mx-auto border rounded-sm px-6 pb-10 mt-10 bg-white">
+      <h1 className="text-2xl font-bold mb-6">Your Cart:</h1>
+      <div className="flex flex-col">
+        {items.map(({ product, quantity, platform }) => (
+          <div key={`${product.id}-${platform}`} className="flex items-center gap-2 border  p-2 shadow-sm">
             {product.image_url && (
               <img src={product.image_url} alt={product.name} className="h-16 w-16 object-contain" />
             )}
             <div className="flex-1">
-              <h2 className="font-semibold">{product.name}</h2>
-              <p className="font-bold">{product.price_cents * quantity} {product.currency}</p>
+              <h2 className="font-semibold text-black">{product.name}</h2>
+              {platform && <p className="text-xs text-gray-500 underline">{platform}</p>}
+              <p className="font-bold text-black">{product.price_cents * quantity} {product.currency}</p>
             </div>
             <div className="flex flex-col items-center border rounded overflow-hidden w-6">
               <button
@@ -53,7 +54,8 @@ const CartPage = () => {
         ))}
       </div>
       <div className="mt-6 flex justify-between items-center border-t pt-4">
-        <p className="text-lg font-bold text-red-500 underline">Total: {total} {currency}</p>
+        <p className="text-lg font-bold underline text-black pl-8">Total:</p>
+        <p className="text-lg font-bold text-red-500 pr-100"> {total} {currency}</p>
         <button className="bg-[#6c47ff] text-white rounded-full px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
           Checkout
         </button>
