@@ -32,7 +32,7 @@ const Home = () => {
     fetchProducts()
   }, [])
 
-  const genres = [...new Set(products.map(p => p.Genre).filter(Boolean))] as string[]
+  const genres = [...new Set(products.flatMap(p => p.genre ?? []))]
 
   const platforms = [...new Set(products.flatMap(p => p.platforms || []))] as string[]
 
@@ -51,7 +51,7 @@ const Home = () => {
   }
 
   const filtered = products.filter(p => {
-    const genreMatch = selectedGenres.length === 0 || (p.Genre && selectedGenres.includes(p.Genre))
+    const genreMatch = selectedGenres.length === 0 || (p.genre && p.genre.some(g => selectedGenres.includes(g)))
     const platformMatch = selectedPlatforms.length === 0 || (p.platforms && p.platforms.some(pl => selectedPlatforms.includes(pl)))
     const searchMatch = !searchQuery || p.name.toLowerCase().includes(searchQuery)
     return genreMatch && platformMatch && searchMatch

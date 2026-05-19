@@ -23,7 +23,7 @@ export default function MiniCart() {
                   <p className="text-xs text-gray-500">Qty: {quantity}{platform ? ` · ${platform}` : ''}</p>
                   <p className="text-sm font-bold text-black underline">{product.price_cents * quantity} {product.currency}</p>
                 </div>
-                <button className="text-xs text-red-400 border rounded-sm px-1 hover:bg-red-100 shrink-0 mt-4" onClick={() => removeFromCart(product.id)}>
+                <button className="text-xs text-red-400 border rounded-sm px-1 hover:bg-red-100 shrink-0 mt-4" onClick={() => removeFromCart(product.id, platform)}>
                   Remove
                 </button>
               </div>
@@ -31,7 +31,7 @@ export default function MiniCart() {
           </div>
           <div className="border-t px-3 py-2 flex justify-between items-center">
             <span className="text-sm font-bold underline text-red-500">Total: {total} {currency}</span>
-            <Link to="/cart" className="text-xs bg-[#6c47ff] text-white rounded-full px-3 py-1 hover:opacity-90">View Cart</Link>
+            <Link to="/cart" className="text-xs bg-[#6c47ff] text-white rounded-sm px-3 py-1 hover:opacity-90">View Cart</Link>
           </div>
         </>
       )}

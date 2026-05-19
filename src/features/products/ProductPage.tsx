@@ -135,7 +135,7 @@ const ProductPage = () => {
                 setPlatformError(false)
                 addToCart(product, selectedPlatform || undefined)
               }}
-              className="mt-4 w-full bg-[#6c47ff] text-white rounded-full py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
+              className="mt-4 w-full bg-[#6c47ff] text-white rounded-sm py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
             >
               Add to Cart
             </button>

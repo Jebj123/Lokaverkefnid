@@ -11,8 +11,8 @@ type CartItem = {
 type CartContextType = {
   items: CartItem[]
   addToCart: (product: Product, platform?: string) => void
-  removeFromCart: (productId: number) => void
-  updateQuantity: (productId: number, quantity: number) => void
+  removeFromCart: (productId: number, platform?: string) => void
+  updateQuantity: (productId: number, quantity: number, platform?: string) => void
   clearCart: () => void
   totalItems: number
 }
@@ -41,13 +41,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const removeFromCart = (productId: number) => {
-    setItems(prev => prev.filter(i => i.product.id !== productId))
+  const removeFromCart = (productId: number, platform?: string) => {
+    setItems(prev => prev.filter(i => !(i.product.id === productId && i.platform === platform)))
   }
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: number, quantity: number, platform?: string) => {
     if (quantity < 1) return
-    setItems(prev => prev.map(i => i.product.id === productId ? { ...i, quantity } : i))
+    setItems(prev => prev.map(i =>
+      i.product.id === productId && i.platform === platform ? { ...i, quantity } : i
+    ))
   }
 
   const clearCart = () => setItems([])

@@ -9,7 +9,7 @@ const CartPage = () => {
     return (
       <div className="flex flex-col items-center justify-center p-20 gap-4">
         <p className="text-gray-500 text-lg">Your cart is empty.</p>
-        <Link to="/" className="bg-[#6c47ff] text-white rounded-full px-6 py-2 text-sm font-medium hover:opacity-90">
+        <Link to="/" className="bg-[#6c47ff] text-white rounded-sm px-6 py-2 text-sm font-medium hover:opacity-90">
           Browse Products
         </Link>
       </div>
@@ -35,17 +35,17 @@ const CartPage = () => {
             </div>
             <div className="flex flex-col items-center border rounded overflow-hidden w-6">
               <button
-                onClick={() => updateQuantity(product.id, quantity + 1)}
+                onClick={() => updateQuantity(product.id, quantity + 1, platform)}
                 className="w-full hover:bg-gray-100 cursor-pointer text-[9px] leading-none py-0.5"
               >▲</button>
               <span className="text-xs font-medium border-y w-full text-center py-0.5">{quantity}</span>
               <button
-                onClick={() => updateQuantity(product.id, quantity - 1)}
+                onClick={() => updateQuantity(product.id, quantity - 1, platform)}
                 className="w-full hover:bg-gray-100 cursor-pointer text-[9px] leading-none py-0.5"
               >▼</button>
             </div>
             <button
-              onClick={() => removeFromCart(product.id)}
+              onClick={() => removeFromCart(product.id, platform)}
               className="text-sm text-red-500 hover:text-red-700 cursor-pointer ml-2 border pl-1 pr-1 rounded-sm hover:bg-red-100"
             >
               Remove
@@ -56,7 +56,7 @@ const CartPage = () => {
       <div className="mt-6 flex justify-between items-center border-t pt-4">
         <p className="text-lg font-bold underline text-black pl-8">Total:</p>
         <p className="text-lg font-bold text-red-500 pr-100"> {total} {currency}</p>
-        <button className="bg-[#6c47ff] text-white rounded-full px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
+        <button className="bg-[#6c47ff] text-white rounded-sm px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
           Checkout
         </button>
       </div>

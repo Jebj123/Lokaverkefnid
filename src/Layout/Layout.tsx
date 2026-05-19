@@ -55,10 +55,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen w-full bg-blue-50">
       <header >
-        <div className="flex mb-6 border-b rounded-sm bg-gradient-to-b from-blue-50 to-blue-100 shadow-[0_0_5px_gray]">
+        <div className="flex mb-6 border-b rounded-sm bg-linear-to-b from-blue-50 to-blue-200 shadow-[0_0_5px_gray]">
           <div className="grid grid-cols-3 items-center p-2 w-full">
             <div className="flex items-center ml-8">
-              <div className="pl-5 pr-5 rounded-md pt-1 pb-1  ">
+              <div className="pl-5 pr-5 rounded-md pt-1 pb-1">
                 <Link to="/" className="flex items-center">
                   <span className="text-xl font-extrabold text-blue-700 ">Game</span><span className="text-xl font-extrabold underline text-red-600">hub</span>
                   <img src={joystick} className="h-10 pl-3"/>
