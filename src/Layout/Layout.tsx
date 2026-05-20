@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Input } from '@/Components/ui/input'
 import MiniCart from '../features/cart/MiniCart'
 import SearchDropdown from '../features/products/SearchDropdown'
+import Menu from '../assets/Menu.png'
+import MenuDropdown from "../features/products/MenuDropdown";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { totalItems } = useCart()
@@ -15,6 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
   const wasSignedOut = useRef(false)
   const [search, setSearch] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,12 +67,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <img src={joystick} className="h-10 pl-3"/>
                 </Link>
               </div>
+              <div className="grid grid-cols-2 mt-1 ml-5 hover:cursor-pointer" onClick={() => setMenuOpen(o => !o)}>
+                <img src={Menu} className="h-8 " />
+                <p className="text-sm text-black pt-1 font-medium">Menu</p>
+              </div>
             </div>
             <div className="flex justify-center">
               <div ref={searchRef} className="relative w-96">
                 <Input
                   placeholder="🔍 Search games..." 
-                  className="bg-white w-full h-8 text-sm bg-white shadow-[0_0_5px_gray]"
+                  className="bg-white w-full h-8 text-sm shadow-[0_0_5px_gray]"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   onKeyDown={handleSearch}
@@ -104,6 +111,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </SignedIn>
             </div>
           </div>
+          {menuOpen && <MenuDropdown onClose={() => setMenuOpen(false)} />}
           </div>
       </header>
       <main className="flex min-h-[calc(100vh-180px)] w-full pb-10 ">

@@ -9,6 +9,7 @@ import { CartProvider } from './features/cart/CartContext'
 import CheckoutPage from './features/checkout/checkoutPage'
 import { ProtectedRoute } from './features/auth/protectedRoute'
 import OrderCompletePage from './features/orderCompletePage/orderCompletePage'
+import RetroProductPage from './features/products/RetroProductPage'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="/shop/:shopId" element={<ShopPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/retro-product" element={<RetroProductPage />} />
+          <Route path="/retro-product/:productId" element={<RetroProductPage />} />
           <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
           <Route path="/order-complete" element={<ProtectedRoute><OrderCompletePage /></ProtectedRoute>} />
         </Routes>

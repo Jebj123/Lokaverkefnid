@@ -3,8 +3,9 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
 import AdBanner from '../adBanner/AdBanner'
-const Home = () => {
-  const [products, setProducts] = useState<Product[]>([])
+
+const RetroProductPage = () => {
+const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -20,7 +21,7 @@ const Home = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('shop_id', 'a95c999d-f19e-4335-8302-696193934e87')
+        .eq('shop_id', 'a95c999d-f19e-4335-8302-696193934e86')
         .eq('is_active', true)
       if (error) {
         setError(error.message)
@@ -170,4 +171,5 @@ const Home = () => {
   )
 }
 
-export default Home
+
+export default RetroProductPage
