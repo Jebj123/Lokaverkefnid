@@ -178,7 +178,7 @@ const CheckoutPage = () => {
           </div>
           <button
             type="submit"
-            className="mt-2 bg-[#6c47ff] text-white rounded-full py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
+            className="mt-2 bg-[#6c47ff] text-white rounded-sm py-3 font-medium hover:opacity-90 transition-opacity cursor-pointer"
 >
             Place Order
           </button>

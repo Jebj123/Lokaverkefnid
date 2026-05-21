@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
 import AdBanner from '../adBanner/AdBanner'
+import FilterSidebar from './FilterSidebar'
 
 const RetroProductPage = () => {
 const [products, setProducts] = useState<Product[]>([])

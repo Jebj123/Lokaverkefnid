@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
+import FilterSidebar from './FilterSidebar'
 
 const RETRO_SHOP_ID = 'a95c999d-f19e-4335-8302-696193934e86'
 const MAIN_SHOP_ID = 'a95c999d-f19e-4335-8302-696193934e87'
@@ -13,6 +14,9 @@ const SearchResultsPage = () => {
   const query = searchParams.get('q') ?? ''
   const [results, setResults] = useState<ResultProduct[]>([])
   const [loading, setLoading] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([])
   const PAGE_SIZE = 15
   const [page, setPage] = useState(0)
   const navigate = useNavigate()
@@ -20,6 +24,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     if (!query.trim()) return
     setLoading(true)
+    setPage(0)
     const fetchShop = (shopId: string) =>
       supabase
         .from('products')
@@ -33,6 +38,29 @@ const SearchResultsPage = () => {
     })
   }, [query])
 
+  const genres = [...new Set(results.flatMap(p => p.genre ?? []))]
+  const platforms = [...new Set(results.flatMap(p => p.platforms ?? []))] as string[]
+
+  const toggleGenre = (genre: string) => {
+    setPage(0)
+    setSelectedGenres(prev =>
+      prev.includes(genre) ? prev.filter(g => g !== genre) : [...prev, genre]
+    )
+  }
+
+  const togglePlatform = (platform: string) => {
+    setPage(0)
+    setSelectedPlatforms(prev =>
+      prev.includes(platform) ? prev.filter(p => p !== platform) : [...prev, platform]
+    )
+  }
+
+  const filtered = results.filter(p => {
+    const genreMatch = selectedGenres.length === 0 || (p.genre && p.genre.some(g => selectedGenres.includes(g)))
+    const platformMatch = selectedPlatforms.length === 0 || (p.platforms && p.platforms.some(pl => selectedPlatforms.includes(pl)))
+    return genreMatch && platformMatch
+  })
+
   if (loading) return <div className="flex justify-center p-10">Searching...</div>
 
   return (
@@ -45,13 +73,30 @@ const SearchResultsPage = () => {
       </button>
       <h1 className="text-lg font-semibold mb-6">
         Results for <span className="text-blue-700">"{query}"</span>
-        <span className="text-sm font-normal text-gray-500 ml-2">({results.length} found)</span>
+        <span className="text-sm font-normal underline text-gray-600 ml-5 ">({filtered.length} found)</span>
       </h1>
-      {results.length === 0 ? (
+      <FilterSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        genres={genres}
+        platforms={platforms}
+        selectedGenres={selectedGenres}
+        selectedPlatforms={selectedPlatforms}
+        onToggleGenre={toggleGenre}
+        onTogglePlatform={togglePlatform}
+        onClearFilters={() => { setSelectedGenres([]); setSelectedPlatforms([]) }}
+      />
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="mb-4 px-4 py-2 rounded-lg text-sm font-medium hover:border transition-colors cursor-pointer bg-white shadow-gray-300"
+      >
+        Filter
+      </button>
+      {filtered.length === 0 ? (
         <p className="text-center text-gray-500 mt-10">No products found.</p>
       ) : (
         <div className="grid grid-cols-5 gap-3">
-          {results.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map(product => {
+          {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map(product => {
             const isRetro = product.shop_id === RETRO_SHOP_ID
             return (
               <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col w-55 h-68 hover:border">
@@ -81,10 +126,10 @@ const SearchResultsPage = () => {
           disabled={page === 0}
           className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer bg-white"
         >←</button>
-        <span className="text-sm text-gray-500">{page + 1} / {Math.ceil(results.length / PAGE_SIZE) || 1}</span>
+        <span className="text-sm text-gray-500">{page + 1} / {Math.ceil(filtered.length / PAGE_SIZE) || 1}</span>
         <button
           onClick={() => setPage(p => p + 1)}
-          disabled={(page + 1) * PAGE_SIZE >= results.length}
+          disabled={(page + 1) * PAGE_SIZE >= filtered.length}
           className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer bg-white"
         >→</button>
       </div>

@@ -4,11 +4,11 @@ import Home from "./features/products/Home"
 import ShopPage from "./features/products/ShopPage"
 import ProductPage from "./features/products/ProductPage"
 import CartPage from "./features/cart/CartPage"
-import Layout from "./Layout/Layout"
+import Layout from "./Components/layout/Layout"
 import { CartProvider } from './features/cart/CartContext'
 import CheckoutPage from './features/checkout/checkoutPage'
 import { ProtectedRoute } from './features/auth/protectedRoute'
-import OrderCompletePage from './features/orderCompletePage/orderCompletePage'
+import OrderCompletePage from './features/order/OrderCompletePage'
 import RetroProductPage from './features/products/RetroProductPage'
 import SearchResultsPage from './features/products/SearchResultsPage'
 

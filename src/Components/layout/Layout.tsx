@@ -1,15 +1,15 @@
 
 import { Link, useNavigate } from "react-router-dom"
-import joystick from "../assets/joystick.png"
-import cartIcon from "../assets/Cart.png"
+import joystick from "../../assets/joystick.png"
+import cartIcon from "../../assets/Cart.png"
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useAuth } from '@clerk/clerk-react';
-import { useCart } from '../features/cart/CartContext';
+import { useCart } from '../../features/cart/CartContext';
 import { useEffect, useRef, useState } from 'react';
 import { Input } from '@/Components/ui/input'
-import MiniCart from '../features/cart/MiniCart'
-import SearchDropdown from '../features/products/SearchDropdown'
-import Menu from '../assets/Menu.png'
-import MenuDropdown from "../features/products/MenuDropdown";
+import MiniCart from '../../features/cart/MiniCart'
+import SearchDropdown from '../../features/products/SearchDropdown'
+import Menu from '../../assets/Menu.png'
+import MenuDropdown from "../../features/products/MenuDropdown";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { totalItems } = useCart()
@@ -75,7 +75,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex justify-center">
               <div ref={searchRef} className="relative w-96">
                 <Input
-                  placeholder="🔍 Search games..." 
+                  placeholder="🔍 Search games..."
                   className="bg-white w-full h-8 text-sm shadow-[0_0_5px_gray]"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
