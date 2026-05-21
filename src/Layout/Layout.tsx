@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && search.trim()) {
-      navigate(`/?q=${encodeURIComponent(search.trim())}`)
+      navigate(`/search?q=${encodeURIComponent(search.trim())}`)
       setSearch('')
     }
     if (e.key === 'Escape') setSearch('')

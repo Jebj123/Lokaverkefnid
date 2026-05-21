@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 
+const RETRO_SHOP_ID = 'a95c999d-f19e-4335-8302-696193934e86'
+const MAIN_SHOP_ID = 'a95c999d-f19e-4335-8302-696193934e87'
+
 type SearchProduct = {
   id: number
   name: string
@@ -9,6 +12,7 @@ type SearchProduct = {
   currency: string
   image_url: string | null
   platforms: string[] | null
+  shop_id: string
 }
 
 type Props = {
@@ -27,18 +31,20 @@ export default function SearchDropdown({ query, onSelect }: Props) {
     }
     let cancelled = false
     setLoading(true)
-    supabase
-      .from('products')
-      .select('id, name, price_cents, currency, image_url, platforms')
-      .ilike('name', `%${query}%`)
-      .eq('is_active', true)
-      .limit(6)
-      .then(({ data }) => {
-        if (!cancelled) {
-          setResults(data ?? [])
-          setLoading(false)
-        }
-      })
+    const fetchShop = (shopId: string) =>
+      supabase
+        .from('products')
+        .select('id, name, price_cents, currency, image_url, platforms, shop_id')
+        .ilike('name', `%${query}%`)
+        .eq('is_active', true)
+        .eq('shop_id', shopId)
+        .limit(3)
+    Promise.all([fetchShop(MAIN_SHOP_ID), fetchShop(RETRO_SHOP_ID)]).then(([main, retro]) => {
+      if (!cancelled) {
+        setResults([...(main.data ?? []), ...(retro.data ?? [])])
+        setLoading(false)
+      }
+    })
     return () => { cancelled = true }
   }, [query])
 
@@ -55,7 +61,7 @@ export default function SearchDropdown({ query, onSelect }: Props) {
           {results.map(product => (
             <li key={product.id} className='border'>
               <Link
-                to={`/product/${product.id}`}
+                to={product.shop_id === RETRO_SHOP_ID ? `/retro-product/${product.id}` : `/product/${product.id}`}
                 onClick={onSelect}
                 className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 transition-colors"
               >
