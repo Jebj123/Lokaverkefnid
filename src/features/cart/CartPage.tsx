@@ -25,8 +25,10 @@ const CartPage = () => {
       <div className="flex flex-col">
         {items.map(({ product, quantity, platform }) => (
           <div key={`${product.id}-${platform}`} className="flex items-center gap-2 border  p-2 shadow-sm">
-            {product.image_url && (
-              <img src={product.image_url} alt={product.name} className="h-16 w-16 object-contain" />
+            {product.image_url ? (
+              <img src={product.image_url} alt={product.name} className="h-16 w-16 object-contain rounded shrink-0" />
+            ) : (
+              <div className="h-16 w-16 bg-gray-100 rounded shrink-0" />
             )}
             <div className="flex-1">
               <h2 className="font-semibold text-black">{product.name}</h2>

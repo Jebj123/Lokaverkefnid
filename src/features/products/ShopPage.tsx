@@ -35,8 +35,10 @@ const ShopPage = () => {
         {products.map((product) => (
           <div key={product.id} className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col w-44 h-64">
             <Link to={`/product/${product.id}`} className="flex flex-col flex-1">
-              {product.image_url && (
+              {product.image_url ? (
                 <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />
+              ) : (
+                <div className="w-full h-36 bg-gray-100" />
               )}
               <div className="px-3 py-3 flex flex-col items-center justify-between flex-1">
                 <h2 className="font-semibold text-sm text-center line-clamp-2 pb-1">{product.name}</h2>

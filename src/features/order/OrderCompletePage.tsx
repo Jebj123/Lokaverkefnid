@@ -24,8 +24,10 @@ const OrderCompletePage = () => {
       <div className="flex flex-col gap-3 w-full">
         {items.map(({ product, quantity, platform }) => (
           <div key={`${product.id}-${platform}`} className="flex items-center gap-4 border rounded-xl p-4 shadow-sm">
-            {product.image_url && (
-              <img src={product.image_url} alt={product.name} className="h-14 w-14 object-contain" />
+            {product.image_url ? (
+              <img src={product.image_url} alt={product.name} className="h-14 w-14 object-contain rounded shrink-0" />
+            ) : (
+              <div className="h-14 w-14 bg-gray-100 rounded shrink-0" />
             )}
             <div className="flex-1">
               <p className="font-semibold">{product.name}</p>

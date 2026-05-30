@@ -51,7 +51,7 @@ export default function SearchDropdown({ query, onSelect }: Props) {
   if (!query.trim()) return null
 
   return (
-    <div className="absolute top-full left-0 right-0  bg-white border rounded-b-sm shadow-lg z-50 overflow-hidden">
+    <div data-testid="search-dropdown" className="absolute top-full left-0 right-0  bg-white border rounded-b-sm shadow-lg z-50 overflow-hidden">
       {loading ? (
         <p className="text-sm text-gray-400 text-center py-4">Searching...</p>
       ) : results.length === 0 ? (

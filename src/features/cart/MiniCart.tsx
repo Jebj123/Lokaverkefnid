@@ -17,8 +17,10 @@ export default function MiniCart() {
           <div className="flex flex-col gap-2 p-3 max-h-64 overflow-y-auto ">
             {items.map(({ product, quantity, platform }) => (
               <div key={`${product.id}-${platform}`} className="flex items-start gap-3 border-b pb-3 last:border-0">
-                {product.image_url && (
+                {product.image_url ? (
                   <img src={product.image_url} alt={product.name} className="h-10 w-10 object-contain rounded shrink-0" />
+                ) : (
+                  <div className="h-10 w-10 bg-gray-100 rounded shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate text-black">{product.name}</p>

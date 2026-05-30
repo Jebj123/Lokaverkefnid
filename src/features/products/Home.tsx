@@ -88,8 +88,10 @@ const Home = () => {
         {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((product) => (
           <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col w-55 h-68 hover:border">
             <Link to={`/product/${product.id}`} className="flex flex-col flex-1">
-              {product.image_url && (
+              {product.image_url ? (
                 <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />
+              ) : (
+                <div className="w-full h-36 bg-gray-100" />
               )}
               <div className="px-3 py-3 flex flex-col items-center justify-between flex-1">
                 <div className="h-12 flex items-center">
