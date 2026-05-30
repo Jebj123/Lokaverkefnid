@@ -6,7 +6,7 @@ const meta: Meta<typeof SearchDropdown> = {
   title: 'Features/Products/SearchDropdown',
   component: SearchDropdown,
   args: {
-    query: 's',
+    query: 'Halo',
     onSelect: () => {},
   },
   decorators: [
@@ -22,8 +22,7 @@ export default meta
 type Story = StoryObj<typeof SearchDropdown>
 
 const mockProducts = [
-  { id: 1, name: 'The First Berserker: Khazan', price_cents: 5999, currency: 'ISK', image_url: null, platforms: ['PC', 'Ps5'], shop_id: 'a95c999d-f19e-4335-8302-696193934e87' },
-  { id: 2, name: 'Halo 3', price_cents: 2999, currency: 'ISK', image_url: null, platforms: ['PC'], shop_id: 'a95c999d-f19e-4335-8302-696193934e87' },
+  { id: 2, name: 'Halo Infinite', price_cents: 2999, currency: 'ISK', image_url: 'https://upload.wikimedia.org/wikipedia/en/1/14/Halo_Infinite.png', platforms: ['PC', 'Xbox X/S'], shop_id: 'a95c999d-f19e-4335-8302-696193934e87' },
 ]
 
 const productsHandler = (data: typeof mockProducts) =>
