@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { ReactNode } from 'react'
 import type { Product } from '../../types'
 
@@ -8,63 +9,57 @@ type CartItem = {
   platform?: string
 }
 
-type CartContextType = {
+type CartStore = {
   items: CartItem[]
+  totalItems: number
   addToCart: (product: Product, platform?: string) => void
   removeFromCart: (productId: number, platform?: string) => void
   updateQuantity: (productId: number, quantity: number, platform?: string) => void
   clearCart: () => void
-  totalItems: number
 }
 
-const CartContext = createContext<CartContextType | null>(null)
+const computeTotal = (items: CartItem[]) => items.reduce((sum, i) => sum + i.quantity, 0)
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('cart')
-    return saved ? JSON.parse(saved) : []
-  })
+export const useCart = create<CartStore>()(
+  persist(
+    (set) => ({
+      items: [],
+      totalItems: 0,
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items))
-  }, [items])
+      addToCart: (product, platform) => set(state => {
+        const existing = state.items.find(i => i.product.id === product.id && i.platform === platform)
+        const items = existing
+          ? state.items.map(i =>
+              i.product.id === product.id && i.platform === platform
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            )
+          : [...state.items, { product, quantity: 1, platform }]
+        return { items, totalItems: computeTotal(items) }
+      }),
 
-  const addToCart = (product: Product, platform?: string) => {
-    setItems(prev => {
-      const existing = prev.find(i => i.product.id === product.id && i.platform === platform)
-      if (existing) {
-        return prev.map(i =>
-          i.product.id === product.id && i.platform === platform ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      }
-      return [...prev, { product, quantity: 1, platform }]
-    })
-  }
+      removeFromCart: (productId, platform) => set(state => {
+        const items = state.items.filter(i => !(i.product.id === productId && i.platform === platform))
+        return { items, totalItems: computeTotal(items) }
+      }),
 
-  const removeFromCart = (productId: number, platform?: string) => {
-    setItems(prev => prev.filter(i => !(i.product.id === productId && i.platform === platform)))
-  }
+      updateQuantity: (productId, quantity, platform) => {
+        if (quantity < 1) return
+        set(state => {
+          const items = state.items.map(i =>
+            i.product.id === productId && i.platform === platform ? { ...i, quantity } : i
+          )
+          return { items, totalItems: computeTotal(items) }
+        })
+      },
 
-  const updateQuantity = (productId: number, quantity: number, platform?: string) => {
-    if (quantity < 1) return
-    setItems(prev => prev.map(i =>
-      i.product.id === productId && i.platform === platform ? { ...i, quantity } : i
-    ))
-  }
-
-  const clearCart = () => setItems([])
-
-  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
-
-  return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems }}>
-      {children}
-    </CartContext.Provider>
+      clearCart: () => set({ items: [], totalItems: 0 }),
+    }),
+    { name: 'cart' }
   )
-}
+)
 
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used inside CartProvider')
-  return ctx
+// Kept for backward compatibility with tests and Storybook decorators
+export function CartProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>
 }

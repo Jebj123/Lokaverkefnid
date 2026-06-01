@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
-import { CartProvider } from '@/features/cart/CartContext'
+import { useCart } from '@/features/cart/CartContext'
 import CheckoutPage from '@/features/checkout/checkoutPage'
 
 const product = {
@@ -13,17 +13,18 @@ const product = {
 }
 
 const renderWithCart = (cartItems = [{ product, quantity: 2 }]) => {
-  localStorage.setItem('cart', JSON.stringify(cartItems))
+  useCart.setState({ items: cartItems, totalItems: cartItems.reduce((sum, i) => sum + i.quantity, 0) })
   return render(
     <MemoryRouter>
-      <CartProvider>
-        <CheckoutPage />
-      </CartProvider>
+      <CheckoutPage />
     </MemoryRouter>
   )
 }
 
-beforeEach(() => localStorage.clear())
+beforeEach(() => {
+  localStorage.clear()
+  useCart.setState({ items: [], totalItems: 0 })
+})
 
 describe('CheckoutPage — empty cart', () => {
   it('shows empty state message', () => {

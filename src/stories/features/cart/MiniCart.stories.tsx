@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { CartProvider } from '@/features/cart/CartContext'
+import { useCart } from '@/features/cart/CartContext'
 import MiniCart from '@/features/cart/MiniCart'
 
 const product = {
@@ -39,8 +39,8 @@ type Story = StoryObj<typeof MiniCart>
 export const Empty: Story = {
   decorators: [
     (Story) => {
-      localStorage.setItem('cart', JSON.stringify([]))
-      return <CartProvider><Story /></CartProvider>
+      useCart.setState({ items: [], totalItems: 0 })
+      return <Story />
     },
   ],
 }
@@ -48,11 +48,12 @@ export const Empty: Story = {
 export const WithItems: Story = {
   decorators: [
     (Story) => {
-      localStorage.setItem('cart', JSON.stringify([
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      useCart.setState({ items: [
         { product, quantity: 2, platform: 'PC' },
-        { product: { ...product, id: 2, name: 'Doom Eternal', price_cents: 4999, image_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Cover_Art_of_Doom_Eternal.png/250px-Cover_Art_of_Doom_Eternal.png' }, quantity: 1, platform: ['Ps5', 'Xbox X/S'] },
-      ]))
-      return <CartProvider><Story /></CartProvider>
+        { product: { ...product, id: 2, name: 'Doom Eternal', price_cents: 4999, image_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Cover_Art_of_Doom_Eternal.png/250px-Cover_Art_of_Doom_Eternal.png' }, quantity: 1, platform: 'Ps5' },
+      ] as any, totalItems: 3 })
+      return <Story />
     },
   ],
 }

@@ -23,7 +23,7 @@ describe('Cart', () => {
   it('user sees their cart items', () => {
     cy.visit('/cart', {
       onBeforeLoad(win) {
-        win.localStorage.setItem('cart', JSON.stringify([cartItem]))
+        win.localStorage.setItem('cart', JSON.stringify({ state: { items: [cartItem], totalItems: 1 }, version: 0 }))
       },
     })
     cy.get('main').contains('Persona 5 Royal').should('be.visible')
@@ -37,7 +37,7 @@ describe('Cart', () => {
     ]
     cy.visit('/cart', {
       onBeforeLoad(win) {
-        win.localStorage.setItem('cart', JSON.stringify(items))
+        win.localStorage.setItem('cart', JSON.stringify({ state: { items, totalItems: 2 }, version: 0 }))
       },
     })
     cy.get('main').contains('Persona 5 Royal').should('be.visible')
@@ -48,7 +48,7 @@ describe('Cart', () => {
   it('user removes an item from cart', () => {
     cy.visit('/cart', {
       onBeforeLoad(win) {
-        win.localStorage.setItem('cart', JSON.stringify([cartItem]))
+        win.localStorage.setItem('cart', JSON.stringify({ state: { items: [cartItem], totalItems: 1 }, version: 0 }))
       },
     })
     cy.get('main').contains('Persona 5 Royal').should('be.visible')
@@ -59,7 +59,7 @@ describe('Cart', () => {
   it('user navigates to checkout from cart', () => {
     cy.visit('/cart', {
       onBeforeLoad(win) {
-        win.localStorage.setItem('cart', JSON.stringify([cartItem]))
+        win.localStorage.setItem('cart', JSON.stringify({ state: { items: [cartItem], totalItems: 1 }, version: 0 }))
       },
     })
     cy.get('main').contains('Checkout').click()

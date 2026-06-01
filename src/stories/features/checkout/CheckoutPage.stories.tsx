@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { CartProvider } from '@/features/cart/CartContext'
+import { useCart } from '@/features/cart/CartContext'
 import CheckoutPage from '@/features/checkout/checkoutPage'
 
 const product = {
@@ -9,11 +9,12 @@ const product = {
   youtube_url: null, genre: ['Shooter'], platforms: ['PC'],
 }
 
-const withCart = (items: object[]) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const withCart = (items: any[]) => ({
   decorators: [
     (Story: React.ComponentType) => {
-      localStorage.setItem('cart', JSON.stringify(items))
-      return <CartProvider><Story /></CartProvider>
+      useCart.setState({ items, totalItems: items.reduce((sum, i) => sum + i.quantity, 0) })
+      return <Story />
     },
   ],
 })
