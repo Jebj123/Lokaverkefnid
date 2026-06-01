@@ -158,7 +158,16 @@ const CheckoutPage = () => {
                 <FormItem className="flex-1">
                   <FormLabel>Expiry Date</FormLabel>
                   <FormControl>
-                    <Input placeholder="MM/YY" maxLength={5} {...field} />
+                    <Input
+                      placeholder="MM/YY"
+                      maxLength={5}
+                      {...field}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, '').slice(0, 4)
+                        const formatted = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits
+                        field.onChange(formatted)
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
