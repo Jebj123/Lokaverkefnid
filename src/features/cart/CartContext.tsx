@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { ReactNode } from 'react'
 import type { Product } from '../../types'
 
 type CartItem = {
@@ -59,7 +58,3 @@ export const useCart = create<CartStore>()(
   )
 )
 
-// Kept for backward compatibility with tests and Storybook decorators
-export function CartProvider({ children }: { children: ReactNode }) {
-  return <>{children}</>
-}

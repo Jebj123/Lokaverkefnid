@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import type { Product } from '../../types'
 import AdBanner from '../adBanner/AdBanner'
+import FilterSidebar from './FilterSidebar'
 
 const RetroProductPage = () => {
 const [products, setProducts] = useState<Product[]>([])
@@ -64,63 +65,17 @@ const [products, setProducts] = useState<Product[]>([])
   return (
     <div className="px-6 py-8 flex-1">
 
-      {sidebarOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/30 z-40"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 flex flex-col">
-              <button onClick={() => setSidebarOpen(false)} className="text-gray-500 hover:text-black cursor-pointer text-xl pl-55">✕</button>
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="font-semibold text-lg">Genre</h2>
-            </div>
-            <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1">
-              {genres.length === 0 && (
-                <p className="text-sm text-gray-400">No genres available.</p>
-              )}
-              {genres.map(genre => (
-                <label key={genre} className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedGenres.includes(genre)}
-                    onChange={() => toggleGenre(genre)}
-                    className="w-4 h-4 accent-[#6c47ff]"
-                  />
-                  <span className="text-sm">{genre}</span>
-                </label>
-              ))}
-            </div>
-              <h2 className="font-semibold text-lg border-b pl-3 pb-4">Platform</h2>
-            <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1">
-              {platforms.length === 0 && (
-                <p className="text-sm text-gray-400">No platforms available.</p>
-              )}
-              {platforms.map(platform => (
-                <label key={platform} className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedPlatforms.includes(platform)}
-                    onChange={() => togglePlatform(platform)}
-                    className="w-4 h-4 accent-[#6c47ff]"
-                  />
-                  <span className="text-sm">{platform}</span>
-                </label>
-              ))}
-            </div>
-            {(selectedGenres.length > 0 || selectedPlatforms.length > 0) && (
-              <div className="p-4 border-t">
-                <button
-                  onClick={() => { setSelectedGenres([]); setSelectedPlatforms([]) }}
-                  className="w-full text-sm text-[#6c47ff] hover:underline cursor-pointer"
-                >
-                  Clear filters
-                </button>
-              </div>
-            )}
-          </div>
-        </>
-      )}
+      <FilterSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        genres={genres}
+        platforms={platforms}
+        selectedGenres={selectedGenres}
+        selectedPlatforms={selectedPlatforms}
+        onToggleGenre={toggleGenre}
+        onTogglePlatform={togglePlatform}
+        onClearFilters={() => { setSelectedGenres([]); setSelectedPlatforms([]) }}
+      />
 
       <div className="w-fit mx-auto  ">
         <AdBanner />
