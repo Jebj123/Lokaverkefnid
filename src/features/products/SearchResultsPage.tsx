@@ -72,7 +72,7 @@ const SearchResultsPage = () => {
   if (loading) return <div className="flex justify-center p-10">Searching...</div>
 
   return (
-    <div className="px-6 py-8 border-gray-500 min-h-full w-fit mx-auto">
+    <div className="px-2 sm:px-6 py-8 border-gray-500 min-h-full w-full max-w-7xl lg:mx-auto">
       <button
         onClick={() => navigate(-1)}
         className="text-sm text-gray-500 hover:text-gray-800 mb-6 flex items-center gap-1"
@@ -103,11 +103,11 @@ const SearchResultsPage = () => {
       {filtered.length === 0 ? (
         <p className="text-center text-gray-500 mt-10">No products found.</p>
       ) : (
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map(product => {
             const isRetro = product.shop_id === RETRO_SHOP_ID
             return (
-              <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col w-55 h-68 hover:border">
+              <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col hover:border">
                 <Link to={isRetro ? `/retro-product/${product.id}` : `/product/${product.id}`} className="flex flex-col flex-1">
                   {product.image_url && (
                     <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />

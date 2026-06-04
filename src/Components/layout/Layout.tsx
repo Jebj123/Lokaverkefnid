@@ -59,21 +59,57 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen w-full bg-blue-50">
       <header >
         <div className="flex mb-6 border-b rounded-sm bg-linear-to-b from-blue-50 to-blue-200 shadow-[0_0_5px_gray]">
-          <div className="grid grid-cols-3 items-center p-2 w-full">
-            <div className="flex items-center ml-8">
-              <div className="pl-5 pr-5 rounded-md pt-1 pb-1">
+          <div className="flex flex-col md:grid md:grid-cols-3 md:items-center p-2 w-full gap-2">
+            {/* Row 1 mobile: logo only */}
+            <div className="flex items-center justify-center md:justify-start">
+              <div className="px-2 md:px-5 rounded-md py-1">
                 <Link to="/" className="flex items-center">
-                  <span className="text-xl font-extrabold text-blue-700 ">Game</span><span className="text-xl font-extrabold underline text-red-600">hub</span>
+                  <span className="text-xl font-extrabold text-blue-700">Game</span><span className="text-xl font-extrabold underline text-red-600">hub</span>
                   <img src={joystick} className="h-10 pl-3"/>
                 </Link>
               </div>
-              <div className="grid grid-cols-2 mt-1 ml-5 hover:cursor-pointer" onClick={() => setMenuOpen(o => !o)}>
-                <img src={Menu} className="h-8 " />
+              {/* Menu on desktop stays in row 1 */}
+              <div className="hidden md:flex items-center gap-1 mt-1 ml-2 hover:cursor-pointer" onClick={() => setMenuOpen(o => !o)}>
+                <img src={Menu} className="h-8" />
                 <p className="text-sm text-black pt-1 font-medium">Menu</p>
               </div>
             </div>
+
+            {/* Row 2 mobile: menu (start) + cart + auth */}
+            <div className="flex items-center justify-between md:hidden px-2">
+              <div className="flex items-center gap-1 hover:cursor-pointer" onClick={() => setMenuOpen(o => !o)}>
+                <img src={Menu} className="h-8" />
+                <p className="text-sm text-black font-medium">Menu</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="relative group p-1">
+                  <Link to="/cart" className="relative block bg-white rounded-sm">
+                    <img src={cartIcon} className="h-8 border rounded-sm" alt="Cart" />
+                    {totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {totalItems}
+                      </span>
+                    )}
+                  </Link>
+                  <MiniCart />
+                </div>
+                <SignedOut>
+                  <SignInButton>
+                    <button className="bg-gray-100 text-black rounded-sm font-medium text-sm h-8 px-4 cursor-pointer border">Sign In</button>
+                  </SignInButton>
+                  <SignUpButton>
+                    <button className="bg-[#6c47ff] text-white rounded-sm font-medium text-sm h-8 px-4 cursor-pointer">Sign Up</button>
+                  </SignUpButton>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
+            </div>
+
+            {/* Search bar - full width on mobile, centered on desktop */}
             <div className="flex justify-center">
-              <div ref={searchRef} className="relative w-96">
+              <div ref={searchRef} className="relative w-full md:max-w-md">
                 <Input
                   placeholder="🔍 Search games..."
                   className="bg-white w-full h-8 text-sm shadow-[0_0_5px_gray]"
@@ -84,9 +120,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <SearchDropdown query={search} onSelect={() => setSearch('')} />
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3">
-              <div className="relative group p-2 ">
-                <Link to="/cart" className="relative block bg-white rounded-sm ">
+
+            {/* Cart + auth - desktop only */}
+            <div className="hidden md:flex items-center justify-end gap-3">
+              <div className="relative group p-2">
+                <Link to="/cart" className="relative block bg-white rounded-sm">
                   <img src={cartIcon} className="h-8 border rounded-sm" alt="Cart" />
                   {totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -98,12 +136,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
               <SignedOut>
                 <SignInButton>
-                  <button className="bg-gray-100 text-black rounded-sm font-medium text-sm sm:text-base h-8 px-4 sm:px-5 cursor-pointer border ">Sign In</button>
+                  <button className="bg-gray-100 text-black rounded-sm font-medium text-sm h-8 px-4 cursor-pointer border">Sign In</button>
                 </SignInButton>
                 <SignUpButton>
-                  <button className="bg-[#6c47ff] text-white rounded-sm font-medium text-sm sm:text-base h-8 w-28 px-4 sm:px-5 cursor-pointer">
-                    Sign Up
-                  </button>
+                  <button className="bg-[#6c47ff] text-white rounded-sm font-medium text-sm h-8 w-28 px-4 cursor-pointer">Sign Up</button>
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
@@ -115,7 +151,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
       </header>
       <main className="flex min-h-[calc(100vh-180px)] w-full pb-10 ">
-        <div className="min-w-0 flex-1 px-8 flex flex-col">
+        <div className="min-w-0 flex-1 px-2 sm:px-8 flex flex-col">
         {children}
         </div>
       </main>

@@ -20,7 +20,7 @@ const CartPage = () => {
   const currency = items[0]?.product.currency ?? ''
 
   return (
-    <div className="w-189 mx-auto border rounded-sm px-6 pb-10 mt-10 bg-white">
+    <div className="w-full max-w-4xl mx-auto border rounded-sm px-4 sm:px-6 pb-10 mt-10 bg-white">
       <h1 className="text-2xl font-bold mb-6">Your Cart:</h1>
       <div className="flex flex-col">
         {items.map(({ product, quantity, platform }) => (
@@ -56,8 +56,8 @@ const CartPage = () => {
         ))}
       </div>
       <div className="mt-6 flex justify-between items-center border-t pt-4">
-        <p className="text-lg font-bold underline text-black pl-8">Total:</p>
-        <p className="text-lg font-bold text-red-500 pr-100"> {total} {currency}</p>
+        <p className="text-lg font-bold underline text-black">Total:</p>
+        <p className="text-lg font-bold text-red-500">{total} {currency}</p>
         <button className="bg-[#6c47ff] text-white rounded-sm px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
           Checkout
         </button>

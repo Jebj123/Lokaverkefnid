@@ -43,7 +43,7 @@ const CheckoutPage = () => {
     <div className="px-6 py-10">
       <h1 className="text-2xl font-bold mb-6 underline">Summary:</h1>
 
-      <div className="flex gap-8 items-start">
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
         <div className="flex flex-col gap-1 flex-1 border rounded-sm p-6 shadow-sm bg-white">
           {items.map(({ product, quantity, platform }) => (
             <div key={`${product.id}-${platform}`} className="flex items-center shadow-sm">

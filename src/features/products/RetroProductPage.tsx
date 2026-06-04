@@ -63,7 +63,7 @@ const [products, setProducts] = useState<Product[]>([])
   if (error) return <div className="flex justify-center p-10 text-red-500">Error: {error}</div>
 
   return (
-    <div className="px-6 py-8 flex-1">
+    <div className="px-2 sm:px-6 py-8 flex-1 max-w-7xl lg:mx-auto w-full">
 
       <FilterSidebar
         isOpen={sidebarOpen}
@@ -77,7 +77,7 @@ const [products, setProducts] = useState<Product[]>([])
         onClearFilters={() => { setSelectedGenres([]); setSelectedPlatforms([]) }}
       />
 
-      <div className="w-fit mx-auto  ">
+      <div className="w-full">
         <AdBanner />
         <button
           onClick={() => setSidebarOpen(true)}
@@ -85,9 +85,9 @@ const [products, setProducts] = useState<Product[]>([])
         >
           Filter
         </button>
-      <div className="grid grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((product) => (
-          <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col w-55 h-68 hover:border">
+          <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col hover:border">
             <Link to={`/retro-product/${product.id}`} className="flex flex-col flex-1">
               {product.image_url && (
                 <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />

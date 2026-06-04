@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { SelectField } from '@/Components/ui/select'
 import { supabase } from '../../supabaseClient'
@@ -9,7 +9,7 @@ type MediaOption = { label: string; value: string; type: 'image' | 'youtube' }
 
 function getYouTubeEmbedUrl(url: string) {
   const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null
+  return match ? `https://www.youtube.com/embed/${match[1]}?fs=0&rel=0` : null
 }
 
 const ProductPage = () => {
@@ -22,6 +22,22 @@ const ProductPage = () => {
   const [selectedMedia, setSelectedMedia] = useState<MediaOption | null>(null)
   const [selectedPlatform, setSelectedPlatform] = useState('')
   const [platformError, setPlatformError] = useState(false)
+  const videoWrapperRef = useRef<HTMLDivElement>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  const handleFullscreen = () => {
+    if (isFullscreen) {
+      document.exitFullscreen()
+    } else {
+      videoWrapperRef.current?.requestFullscreen()
+    }
+  }
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -55,26 +71,36 @@ const ProductPage = () => {
   const mediaOptions = buildMediaOptions(product)
 
   return (
-    <div className="px-6 py-10">
+    <div className="px-2 sm:px-6 py-10">
       <button
         onClick={() => navigate(-1)}
         className="text-sm text-gray-500 hover:text-gray-800 mb-6 flex items-center gap-1"
       >
         ← Back
       </button>
-      <div className="flex gap-6">
-        <div className="w-1/2 flex flex-col">
-          <div className="h-130 flex items-center justify-center p-8 bg-gray-100 rounded-t-sm">
-            {selectedMedia?.type === 'youtube' ? (
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-1/2 flex flex-col">
+          {selectedMedia?.type === 'youtube' ? (
+            <div ref={videoWrapperRef} className={`relative ${isFullscreen ? 'w-screen h-screen bg-black' : 'w-full aspect-video'}`}>
               <iframe
                 src={getYouTubeEmbedUrl(selectedMedia.value) ?? ''}
-                className="w-full h-full rounded-lg"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
               />
-            ) : selectedMedia?.type === 'image' ? (
-              <img src={selectedMedia.value} alt={product.name} className="w-full h-full object-contain" />
-            ) : null}
-          </div>
+              <button
+                onClick={handleFullscreen}
+                className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-xs px-2 py-1 rounded cursor-pointer z-10"
+                title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+              >
+                {isFullscreen ? '✕ Exit' : '⛶ Fullscreen'}
+              </button>
+            </div>
+          ) : selectedMedia?.type === 'image' ? (
+            <div className="flex items-center justify-center p-8 bg-gray-100 rounded-t-sm min-h-64">
+              <img src={selectedMedia.value} alt={product.name} className="max-w-full max-h-96 object-contain" />
+            </div>
+          ) : null}
           {mediaOptions.length > 1 && (
             <div className="flex gap-2 flex-wrap px-6 py-4 justify-center bg-white border rounded-b-sm">
               {mediaOptions.map(opt => {
@@ -96,7 +122,7 @@ const ProductPage = () => {
           )}
         </div>
 
-        <div className="flex flex-col justify-between px-8 pb-8 flex-1">
+        <div className="flex flex-col justify-between px-2 sm:px-8 pb-8 flex-1">
           <div>
             <div className="text-center mb-4">
               <h1 className="text-3xl font-bold underline pb-10">{product.name}</h1>
