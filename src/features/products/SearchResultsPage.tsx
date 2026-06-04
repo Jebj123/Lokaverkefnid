@@ -64,10 +64,9 @@ const SearchResultsPage = () => {
   }
 
   const filtered = results.filter(p => {
-    const nameMatch = p.name.toLowerCase().includes(query.toLowerCase())
     const genreMatch = selectedGenres.length === 0 || (p.genre && p.genre.some(g => selectedGenres.includes(g)))
     const platformMatch = selectedPlatforms.length === 0 || (p.platforms && p.platforms.some(pl => selectedPlatforms.includes(pl)))
-    return nameMatch && genreMatch && platformMatch
+    return genreMatch && platformMatch
   })
 
   if (loading) return <div className="flex justify-center p-10">Searching...</div>
