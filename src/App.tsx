@@ -21,7 +21,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/retro-product" element={<RetroProductPage />} />
-        <Route path="/retro-product/:productId" element={<RetroProductPage />} />
+        <Route path="/retro-product/:productId" element={<ProductPage />} />
         <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         <Route path="/order-complete" element={<ProtectedRoute><OrderCompletePage /></ProtectedRoute>} />
       </Routes>

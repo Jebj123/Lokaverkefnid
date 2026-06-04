@@ -88,7 +88,7 @@ const [products, setProducts] = useState<Product[]>([])
       <div className="grid grid-cols-5 gap-3">
         {filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE).map((product) => (
           <div key={product.id} className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow flex flex-col w-55 h-68 hover:border">
-            <Link to={`/product/${product.id}`} className="flex flex-col flex-1">
+            <Link to={`/retro-product/${product.id}`} className="flex flex-col flex-1">
               {product.image_url && (
                 <img src={product.image_url} alt={product.name} className="w-full h-36 object-contain p-2" />
               )}

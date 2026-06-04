@@ -22,9 +22,14 @@ const SearchResultsPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!query.trim()) return
+    if (!query.trim()) {
+      setResults([])
+      return
+    }
+    setResults([])
     setLoading(true)
     setPage(0)
+    let cancelled = false
     const fetchShop = (shopId: string) =>
       supabase
         .from('products')
@@ -33,9 +38,12 @@ const SearchResultsPage = () => {
         .eq('is_active', true)
         .eq('shop_id', shopId)
     Promise.all([fetchShop(MAIN_SHOP_ID), fetchShop(RETRO_SHOP_ID)]).then(([main, retro]) => {
-      setResults([...(main.data ?? []), ...(retro.data ?? [])])
-      setLoading(false)
+      if (!cancelled) {
+        setResults([...(main.data ?? []), ...(retro.data ?? [])])
+        setLoading(false)
+      }
     })
+    return () => { cancelled = true }
   }, [query])
 
   const genres = [...new Set(results.flatMap(p => p.genre ?? []))]
@@ -56,9 +64,10 @@ const SearchResultsPage = () => {
   }
 
   const filtered = results.filter(p => {
+    const nameMatch = p.name.toLowerCase().includes(query.toLowerCase())
     const genreMatch = selectedGenres.length === 0 || (p.genre && p.genre.some(g => selectedGenres.includes(g)))
     const platformMatch = selectedPlatforms.length === 0 || (p.platforms && p.platforms.some(pl => selectedPlatforms.includes(pl)))
-    return genreMatch && platformMatch
+    return nameMatch && genreMatch && platformMatch
   })
 
   if (loading) return <div className="flex justify-center p-10">Searching...</div>
