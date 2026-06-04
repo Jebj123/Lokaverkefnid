@@ -1,39 +1,42 @@
 import { render, screen, act } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import AdBanner from '@/features/adBanner/AdBanner'
+
+const renderWithRouter = () => render(<MemoryRouter><AdBanner /></MemoryRouter>)
 
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
 describe('AdBanner', () => {
   it('renders an ad image', () => {
-    render(<AdBanner />)
+    renderWithRouter()
     expect(screen.getByRole('img', { name: 'Ad banner' })).toBeInTheDocument()
   })
 
   it('starts visible (opacity 1)', () => {
-    render(<AdBanner />)
+    renderWithRouter()
     const img = screen.getByRole('img', { name: 'Ad banner' })
     expect(img).toHaveStyle({ opacity: '1' })
   })
 
-  it('fades out after 13 seconds', () => {
-    render(<AdBanner />)
-    act(() => vi.advanceTimersByTime(13000))
+  it('fades out after 10 seconds', () => {
+    renderWithRouter()
+    act(() => vi.advanceTimersByTime(10000))
     const img = screen.getByRole('img', { name: 'Ad banner' })
     expect(img).toHaveStyle({ opacity: '0' })
   })
 
   it('fades back in after the slide transition completes', () => {
-    render(<AdBanner />)
-    act(() => vi.advanceTimersByTime(13000 + 400))
+    renderWithRouter()
+    act(() => vi.advanceTimersByTime(10000 + 400))
     const img = screen.getByRole('img', { name: 'Ad banner' })
     expect(img).toHaveStyle({ opacity: '1' })
   })
 
   it('cleans up the interval on unmount', () => {
     const clearSpy = vi.spyOn(globalThis, 'clearInterval')
-    const { unmount } = render(<AdBanner />)
+    const { unmount } = renderWithRouter()
     unmount()
     expect(clearSpy).toHaveBeenCalled()
   })

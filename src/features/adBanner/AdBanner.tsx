@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Ad from '../../assets/Ad.png'
 import Ad2 from '../../assets/Ad2.png'
 
 const ADS = [Ad, Ad2]
-const INTERVAL_MS = 13000
+const AD_LINKS = ['/', '/retro-product']
+const INTERVAL_MS = 10000
 
 const AdBanner = () => {
   const [current, setCurrent] = useState(0)
@@ -22,12 +24,14 @@ const AdBanner = () => {
 
   return (
     <div className="w-full mb-4 hidden lg:block overflow-hidden rounded-md border border-black">
-      <img
-        src={ADS[current]}
-        alt="Ad banner"
-        className="w-full transition-opacity duration-400"
-        style={{ opacity: visible ? 1 : 0 }}
-      />
+      <Link to={AD_LINKS[current]}>
+        <img
+          src={ADS[current]}
+          alt="Ad banner"
+          className="w-full transition-opacity duration-400"
+          style={{ opacity: visible ? 1 : 0 }}
+        />
+      </Link>
     </div>
   )
 }
