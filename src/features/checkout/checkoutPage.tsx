@@ -40,7 +40,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="px-6 py-10">
+    <div className="px-6 py-10 w-full max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 underline">Summary:</h1>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
