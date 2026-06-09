@@ -90,7 +90,7 @@ const ProductPage = () => {
               />
               <button
                 onClick={handleFullscreen}
-                className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-xs px-2 py-1 rounded cursor-pointer z-10"
+                className="absolute bottom-2 right-2 bg-black/70 hover:bg-gray-700 text-white text-xs px-2 py-1 rounded cursor-pointer z-10"
                 title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
               >
                 {isFullscreen ? '✕ Exit' : '⛶ Fullscreen'}
@@ -105,8 +105,9 @@ const ProductPage = () => {
             <div className="flex gap-2 flex-wrap px-6 py-4 justify-center bg-white border rounded-b-sm">
               {mediaOptions.map(opt => {
                 const isSelected = selectedMedia?.value === opt.value
-                const thumb = opt.type === 'youtube'
-                  ? `https://img.youtube.com/vi/${getYouTubeEmbedUrl(opt.value)?.split('/embed/')[1]}/0.jpg`
+                const youtubeId = opt.type === 'youtube' ? opt.value.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1] : null
+                const thumb = youtubeId
+                  ? `https://img.youtube.com/vi/${youtubeId}/0.jpg`
                   : opt.value
                 return (
                   <button
