@@ -100,6 +100,6 @@ src/
 
 ## Github Pages
 
-[GitHub Pages](https://jebj123.github.io/Lokaverkefnid/)
+[![App Screenshot](public/ScreenPage.png)](https://jebj123.github.io/Lokaverkefnid/)
 
 
