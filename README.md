@@ -100,7 +100,6 @@ src/
 
 ## Github Pages
 
-```
 [GitHub Pages](https://jebj123.github.io/Lokaverkefnid/)
-```
+
 
