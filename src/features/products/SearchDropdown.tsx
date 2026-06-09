@@ -57,30 +57,41 @@ export default function SearchDropdown({ query, onSelect }: Props) {
       ) : results.length === 0 ? (
         <p className="text-sm text-gray-400 text-center py-4">No results for "{query}"</p>
       ) : (
-        <ul>
-          {results.map(product => (
-            <li key={product.id} className='border'>
-              <Link
-                to={product.shop_id === RETRO_SHOP_ID ? `/retro-product/${product.id}` : `/product/${product.id}`}
-                onClick={onSelect}
-                className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 transition-colors"
-              >
-                {product.image_url ? (
-                  <img src={product.image_url} alt={product.name} className="h-12 w-12 object-contain rounded shrink-0" />
-                ) : (
-                  <div className="h-12 w-12 bg-gray-100 rounded shrink-0" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <span className="text-base font-medium truncate text-black block">{product.name}</span>
-                  {product.platforms && <span className="text-xs text-gray-500">{product.platforms.join(', ')}</span>}
-                </div>
-                <span className="text-base font-bold text-gray-700 whitespace-nowrap underline">
-                  {product.price_cents} {product.currency}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul>
+            {results.map(product => (
+              <li key={product.id} className='border'>
+                <Link
+                  to={product.shop_id === RETRO_SHOP_ID ? `/retro-product/${product.id}` : `/product/${product.id}`}
+                  onClick={onSelect}
+                  className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 transition-colors"
+                >
+                  {product.image_url ? (
+                    <img src={product.image_url} alt={product.name} className="h-12 w-12 object-contain rounded shrink-0" />
+                  ) : (
+                    <div className="h-12 w-12 bg-gray-100 rounded shrink-0" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <span className="text-base font-medium truncate text-black block">{product.name}</span>
+                    {product.platforms && <span className="text-xs text-gray-500">{product.platforms.join(', ')}</span>}
+                  </div>
+                  <span className="text-base font-bold text-gray-700 whitespace-nowrap underline">
+                    {product.price_cents} {product.currency}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="border">
+            <Link
+              to={`/search?q=${encodeURIComponent(query.trim())}`}
+              onClick={onSelect}
+              className="flex justify-baseline ml-4 items-center py-0.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors underline"
+            >
+              See more results →
+            </Link>
+          </div>
+        </>
       )}
     </div>
   )
