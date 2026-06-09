@@ -56,8 +56,10 @@ const CartPage = () => {
         ))}
       </div>
       <div className="mt-6 flex justify-between items-center border-t pt-4">
-        <p className="text-lg font-bold underline text-black">Total:</p>
-        <p className="text-lg font-bold text-red-500">{total} {currency}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-lg font-bold underline text-black">Total:</p>
+          <p className="text-lg font-bold text-red-500">{total} {currency}</p>
+        </div>
         <button className="bg-[#6c47ff] text-white rounded-sm px-6 py-2 font-medium hover:opacity-90 cursor-pointer" onClick={() => navigate('/checkout')}>
           Checkout
         </button>
