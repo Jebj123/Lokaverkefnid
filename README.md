@@ -98,9 +98,9 @@ src/
 - Rotating ad banner linking to home and retro pages
 - Responsive design
 
-## Building for Production
+## Github Pages
 
-```bash
-npm run build
+```
+[GitHub Pages](https://jebj123.github.io/Lokaverkefnid/)
 ```
 
