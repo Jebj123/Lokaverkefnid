@@ -86,9 +86,10 @@ export default function SearchDropdown({ query, onSelect }: Props) {
             <Link
               to={`/search?q=${encodeURIComponent(query.trim())}`}
               onClick={onSelect}
-              className="flex justify-baseline ml-4 items-center py-0.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors underline"
+              className="flex justify-baseline ml-4 items-center py-0.5 text-sm font-medium text-blue-600 transition-colors"
             >
-              See more results →
+              <h3 className="hover:underline hover:scale-101">See more results →</h3>
+              
             </Link>
           </div>
         </>
